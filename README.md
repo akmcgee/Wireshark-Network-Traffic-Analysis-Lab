@@ -1,2 +1,289 @@
 # Wireshark-Network-Traffic-Analysis-Lab
-This lab demonstrates how to capture, analyze, and interpret live network traffic using Wireshark. The objective of this project was to understand packet capture, analyze common network protocols, and observe how systems communicate across a network in a controlled lab environment.  
+
+## 📌 Project Overview
+This lab demonstrates how to capture, analyze, and interpret live network traffic using Wireshark. The objective of this project was to understand packet capture, analyze common network protocols, and observe how systems communicate across a network in a controlled lab environment.
+
+During the lab, Wireshark was used to capture DNS and ICMP traffic generated from a Windows 10 client communicating with a domain controller and external internet servers.
+
+---
+
+# 🖥️ Lab Environment
+
+| Component | Description |
+|------|------|
+Platform | Microsoft Azure Virtual Machines |
+Client Machine | Windows 10 |
+Domain Controller | Windows Server (Active Directory + DNS) |
+Capture Tool | Wireshark 4.6 |
+Capture Driver | Npcap |
+Network Interface | Ethernet 3 |
+
+### Network IP Addresses Observed
+
+```
+172.17.0.5   → Windows 10 Client
+172.17.0.4   → Domain Controller (DNS Server)
+142.250.76.110 → Google Server
+```
+
+---
+
+# 🎯 Lab Objectives
+
+- Install Wireshark and packet capture drivers
+- Identify active network interfaces
+- Capture live network traffic
+- Analyze DNS and ICMP packets
+- Review packet statistics and communication patterns
+- Understand protocol hierarchy
+- Save and export packet captures
+
+---
+
+# 📡 Packet Capture Process
+
+Packet capture was started on the **Ethernet 3 interface**, which showed the highest network activity.
+
+Traffic was generated using the following commands:
+
+```bash
+ping google.com
+nslookup microsoft.com
+```
+
+A display filter was applied to isolate relevant traffic:
+
+```
+dns or icmp
+```
+
+This allowed analysis of DNS queries and ICMP ping traffic.
+
+---
+
+# 🔍 Packet Analysis
+
+Wireshark displays packet data in three panes.
+
+### Packet List Pane
+Shows a summary of each packet including:
+
+- Packet number
+- Timestamp
+- Source IP
+- Destination IP
+- Protocol
+- Packet length
+- Packet information
+
+Example packet:
+
+```
+Standard query A google.com
+```
+
+---
+
+### Packet Details Pane
+Displays the protocol layers of a packet.
+
+Example DNS packet structure:
+
+```
+Frame
+Ethernet II
+Internet Protocol Version 4
+User Datagram Protocol
+Domain Name System
+```
+
+This process is called **protocol dissection**, where Wireshark decodes raw packet data into readable protocol layers.
+
+---
+
+### Packet Bytes Pane
+Displays the raw packet data in:
+
+- Hexadecimal format
+- ASCII format
+
+This is the underlying data transmitted over the network.
+
+---
+
+# 🌐 DNS Traffic Analysis
+
+DNS packets represented the majority of traffic captured.
+
+Example query observed:
+
+```
+Standard query A google.com
+```
+
+DNS requests were sent from the client:
+
+```
+172.17.0.5 → 172.17.0.4
+```
+
+This shows the Windows client sending DNS queries to the **domain controller acting as the DNS server**.
+
+Example reverse DNS query captured:
+
+```
+Standard query PTR 4.0.17.172.in-addr.arpa
+```
+
+This represents a **reverse DNS lookup**, translating an IP address into a hostname.
+
+---
+
+# 📡 ICMP Traffic Analysis
+
+ICMP packets were generated when testing network connectivity using the `ping` command.
+
+Example packet:
+
+```
+Echo (ping) request
+```
+
+Traffic flow:
+
+```
+172.17.0.5 → 142.250.76.110
+```
+
+This indicates the Windows client sending ICMP echo requests to a Google server.
+
+ICMP accounted for a small percentage of the total traffic in the capture.
+
+---
+
+# 📊 Capture Statistics
+
+### Capture Summary
+
+```
+Total Packets Captured: 215,917
+Capture Duration: 22 minutes
+Average Packets/sec: 162.6
+Average Packet Size: 648 bytes
+Total Data Captured: ~133 MB
+Dropped Packets: 0
+```
+
+No dropped packets indicates that the capture process successfully recorded all observed traffic.
+
+---
+
+# 🖧 Network Endpoints
+
+The Endpoints view identified devices communicating during the capture.
+
+| IP Address | Role |
+|------|------|
+172.17.0.5 | Windows 10 Client |
+172.17.0.4 | Domain Controller / DNS Server |
+142.250.76.110 | External Google Server |
+
+This confirms both **internal network communication and external internet communication** were captured.
+
+---
+
+# 🔗 Network Conversations
+
+The Conversations view shows communication pairs between hosts.
+
+Example conversations observed:
+
+```
+172.17.0.5 → 172.17.0.4
+DNS queries to domain controller
+```
+
+```
+172.17.0.5 → 142.250.76.110
+ICMP traffic to Google server
+```
+
+This confirms the Windows client was communicating with both internal infrastructure and external internet servers.
+
+---
+
+# 🧠 Protocol Hierarchy Analysis
+
+Protocol hierarchy analysis showed the distribution of network protocols in the capture.
+
+```
+Frame
+ └ Ethernet
+     └ IPv4
+         ├ UDP
+         │   └ DNS
+         └ ICMP
+```
+
+### Traffic Distribution
+
+```
+DNS: 94.2%
+ICMP: 5.8%
+```
+
+Most traffic consisted of DNS queries generated by system name resolution and manual DNS queries performed during the lab.
+
+---
+
+# 💾 Packet Capture File Management
+
+The capture was saved using the **PCAPNG format**.
+
+Example exported file:
+
+```
+export_dns_icmp.pcapng
+```
+
+File size:
+
+```
+9.17 KB
+```
+
+This smaller file size is due to exporting **only filtered packets (DNS and ICMP)** rather than the entire capture.
+
+Exporting filtered packets is commonly used in incident response investigations to share only relevant traffic.
+
+---
+
+# 🛠 Tools Used
+
+- Wireshark 4.6
+- Npcap Packet Capture Driver
+- Windows 10 Virtual Machine
+- Microsoft Azure Infrastructure
+
+---
+
+# 📚 Skills Demonstrated
+
+- Packet Capture
+- DNS Traffic Analysis
+- ICMP Network Diagnostics
+- Protocol Hierarchy Analysis
+- Network Endpoint Identification
+- Packet Filtering
+- PCAP File Management
+- Network Traffic Investigation
+
+---
+
+# 🧾 Key Takeaway
+
+This lab demonstrated how Wireshark provides deep visibility into network communications by capturing and dissecting packets at multiple protocol layers.
+
+By analyzing DNS queries, ICMP traffic, network endpoints, and protocol hierarchy statistics, it was possible to observe real network communication patterns between a client machine, a domain controller, and external internet servers.
+
+Wireshark remains a critical tool for network troubleshooting, incident response investigations, and security monitoring within enterprise environments.
