@@ -266,15 +266,17 @@ The small file size reflects the filtered export containing only DNS and ICMP pa
 
 ## 📸 Screenshots
 
-> Add your Wireshark screenshots here
+### Wireshark Installation — Component Selection
+![Wireshark Install](wireshark_install.png)
 
-| Screenshot | Description |
-|---|---|
-| `packet_capture.png` | Live capture on Ethernet 3 interface |
-| `dns_packets.png` | DNS query and response packets |
-| `icmp_traffic.png` | ICMP echo request/reply to Google |
-| `protocol_hierarchy.png` | Protocol distribution statistics |
-| `endpoints.png` | Network endpoints identified |
+### Npcap Driver Installation
+![Npcap Install](npcap_install.png)
+
+### Interface Selection — Ethernet 3 Selected
+![Interface Selection](interface_selection.png)
+
+### Live Packet Capture — DNS & ICMP Filter Applied
+![Packet Analysis](packet_analysis.png)
 
 ---
 
